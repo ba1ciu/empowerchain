@@ -541,6 +541,11 @@ paths:
           required: true
           type: string
           format: uint64
+        - name: mock
+          in: query
+          required: false
+          type: string
+          format: uint64
       tags:
         - Query
   /empowerchain/empowerchain/plasticcredit/params:

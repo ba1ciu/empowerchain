@@ -665,6 +665,7 @@ GET /empowerchain/empowerchain/plasticcredit/issuers/{issuer_id}
 | Name | Source | Type | Go type | Separator | Required | Default | Description |
 |------|--------|------|---------|-----------| :------: |---------|-------------|
 | issuer_id | `path` | uint64 (formatted string) | `string` |  | ✓ |  |  |
+| mock | `query` | uint64 (formatted string) | `string` |  |  |  |  |
 
 #### All responses
 | Code | Status | Description | Has headers | Schema |
