@@ -3,20 +3,19 @@ package module
 import (
 	"math/rand"
 
-	"github.com/EmpowerPlastic/empowerchain/testutil/sample"
 	"github.com/cosmos/cosmos-sdk/baseapp"
-	simappparams "github.com/cosmos/cosmos-sdk/simapp/params"
 	sdk "github.com/cosmos/cosmos-sdk/types"
 	"github.com/cosmos/cosmos-sdk/types/module"
 	simtypes "github.com/cosmos/cosmos-sdk/types/simulation"
 	"github.com/cosmos/cosmos-sdk/x/auth/types"
 	"github.com/cosmos/cosmos-sdk/x/simulation"
+
+	"github.com/EmpowerPlastic/empowerchain/testutil/sample"
 )
 
 // avoid unused import issue
 var (
 	_ = sample.AccAddress
-	_ = simappparams.StakePerAccount
 	_ = simulation.MsgEntryKind
 	_ = baseapp.Paramspace
 )
@@ -34,14 +33,14 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 }
 
 // ProposalContents doesn't return any content functions for governance proposals
-func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalContent {
+func (AppModule) ProposalContents(_ module.SimulationState) []simtypes.WeightedProposalMsg {
 	return nil
 }
 
 // RandomizedParams creates randomized  param changes for the simulator
-func (am AppModule) RandomizedParams(_ *rand.Rand) []simtypes.ParamChange {
+func (am AppModule) RandomizedParams(_ *rand.Rand) []simtypes.LegacyParamChange {
 	// plasticcreditParams := types.DefaultParams()
-	return []simtypes.ParamChange{
+	return []simtypes.LegacyParamChange{
 		/*simulation.NewSimParamChange(types.ModuleName, string(types.KeyCreateissuerAllowlist), func(r *rand.Rand) string {
 			return string(types.Amino.MustMarshalJSON(plasticcreditParams.CreateissuerAllowlist))
 		}),*/

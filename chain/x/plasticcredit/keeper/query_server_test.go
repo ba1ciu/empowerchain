@@ -2,12 +2,15 @@ package keeper_test
 
 import (
 	"fmt"
+	"math/rand"
 
+	sdk "github.com/cosmos/cosmos-sdk/types"
+	"github.com/cosmos/cosmos-sdk/types/query"
+
+	"github.com/EmpowerPlastic/empowerchain/app/params"
 	"github.com/EmpowerPlastic/empowerchain/testutil/sample"
 	"github.com/EmpowerPlastic/empowerchain/x/plasticcredit"
 	"github.com/EmpowerPlastic/empowerchain/x/plasticcredit/keeper"
-	sdk "github.com/cosmos/cosmos-sdk/types"
-	"github.com/cosmos/cosmos-sdk/types/query"
 )
 
 func (s *TestSuite) TestParamsQuery() {
@@ -15,17 +18,18 @@ func (s *TestSuite) TestParamsQuery() {
 	ms := keeper.NewMsgServerImpl(k)
 	goCtx := sdk.WrapSDKContext(s.ctx)
 
-	params := plasticcredit.DefaultParams()
+	updatedParams := plasticcredit.DefaultParams()
+	updatedParams.CreditClassCreationFee = sdk.NewCoin(params.BaseCoinDenom, sdk.NewInt(rand.Int63()))
 	_, err := ms.UpdateParams(goCtx, &plasticcredit.MsgUpdateParams{
 		Authority: k.Authority(),
-		Params:    plasticcredit.Params{},
+		Params:    updatedParams,
 	})
 	s.Require().NoError(err)
 
 	querier := keeper.Querier{Keeper: k}
 	response, err := querier.Params(goCtx, &plasticcredit.QueryParamsRequest{})
 	s.Require().NoError(err)
-	s.Require().Equal(&plasticcredit.QueryParamsResponse{Params: params}, response)
+	s.Require().Equal(&plasticcredit.QueryParamsResponse{Params: updatedParams}, response)
 }
 
 func (s *TestSuite) TestIssuerQuery() {
@@ -142,6 +146,7 @@ func (s *TestSuite) TestCreditClassQuery() {
 	goCtx := sdk.WrapSDKContext(s.ctx)
 	ms := keeper.NewMsgServerImpl(k)
 	issuerAdmin := sample.AccAddress()
+	s.fundAccount(issuerAdmin, sdk.NewCoins(sdk.NewCoin(params.BaseCoinDenom, sdk.NewInt(10e12))))
 	_, err := ms.CreateIssuer(goCtx, &plasticcredit.MsgCreateIssuer{
 		Creator:     k.Authority(),
 		Name:        "Empower",
@@ -181,6 +186,8 @@ func (s *TestSuite) TestCreditClassesQuery() {
 	goCtx := sdk.WrapSDKContext(s.ctx)
 	ms := keeper.NewMsgServerImpl(k)
 	issuerAdmin := sample.AccAddress()
+	s.fundAccount(issuerAdmin, sdk.NewCoins(sdk.NewCoin(params.BaseCoinDenom, sdk.NewInt(10e12))))
+
 	_, err := ms.CreateIssuer(goCtx, &plasticcredit.MsgCreateIssuer{
 		Creator:     k.Authority(),
 		Name:        "Empower",
@@ -196,7 +203,7 @@ func (s *TestSuite) TestCreditClassesQuery() {
 
 	var expectedCreditClasses []plasticcredit.CreditClass
 	for i := 0; i < 11; i++ {
-		abbreviation := fmt.Sprintf("PCRD%d", i)
+		abbreviation := fmt.Sprintf("ABC%d", i)
 		name := fmt.Sprintf("Empower Credits (%s)", abbreviation)
 
 		createMsg := plasticcredit.MsgCreateCreditClass{
@@ -236,8 +243,10 @@ func (s *TestSuite) TestProjectQuery() {
 	goCtx := sdk.WrapSDKContext(s.ctx)
 	ms := keeper.NewMsgServerImpl(k)
 	issuerAdmin := sample.AccAddress()
+	s.fundAccount(issuerAdmin, sdk.NewCoins(sdk.NewCoin(params.BaseCoinDenom, sdk.NewInt(10e12))))
 	applicantAdmin := sample.AccAddress()
 	creditClassAbbreviation := "PCRD"
+
 	_, err := ms.CreateIssuer(goCtx, &plasticcredit.MsgCreateIssuer{
 		Creator:     k.Authority(),
 		Name:        "Empower",

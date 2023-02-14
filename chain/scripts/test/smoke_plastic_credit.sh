@@ -45,7 +45,9 @@ empowerd q plasticcredit applicant 1
 empowerd q plasticcredit applicant 2
 
 echo "--- Test: Plastic Credit Create Credit Class ---"
-empowerd tx plasticcredit create-credit-class PCRD 1 "Empower Plastic Credits" --from alice --yes --home $CHAIN_DIR --chain-id $CHAIN_ID --keyring-backend test --gas auto --gas-prices 0.025umpwr --gas-adjustment 1.5
+empowerd q bank balances empower18hl5c9xn5dze2g50uaw0l2mr02ew57zkk9vga7
+
+empowerd tx plasticcredit create-credit-class PCRD 1 "Empower Plastic Credits" --from alice --yes --home $CHAIN_DIR --chain-id $CHAIN_ID --keyring-backend test  --gas auto --gas-prices 0.025umpwr --gas-adjustment 1.5
 sleep 5
 empowerd tx plasticcredit create-credit-class RCRD 1 "Empower Recycling Credits" --from alice --yes --home $CHAIN_DIR --chain-id $CHAIN_ID --keyring-backend test --gas auto --gas-prices 0.025umpwr --gas-adjustment 1.5
 sleep 5
@@ -256,8 +258,10 @@ if [ "$BOB_BALANCE_3_RETIRED" != "\"9999999989\"" ]; then
   exit 1
 fi
 
-make kill
-sleep 2
+echo "Terminating $BINARY..."
+pkill $BINARY
+sleep 5
+
 echo "Serve killed"
 
 echo "--- Test: Plastic Credit Genesis Export and Import ---"

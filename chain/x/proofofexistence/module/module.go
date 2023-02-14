@@ -6,11 +6,6 @@ import (
 	"math/rand"
 
 	"cosmossdk.io/errors"
-
-	"github.com/EmpowerPlastic/empowerchain/x/proofofexistence"
-	"github.com/EmpowerPlastic/empowerchain/x/proofofexistence/client/cli"
-
-	"github.com/EmpowerPlastic/empowerchain/x/proofofexistence/keeper"
 	"github.com/cosmos/cosmos-sdk/client"
 	"github.com/cosmos/cosmos-sdk/codec"
 	codectypes "github.com/cosmos/cosmos-sdk/codec/types"
@@ -20,6 +15,10 @@ import (
 	"github.com/grpc-ecosystem/grpc-gateway/runtime"
 	"github.com/spf13/cobra"
 	abci "github.com/tendermint/tendermint/abci/types"
+
+	"github.com/EmpowerPlastic/empowerchain/x/proofofexistence"
+	"github.com/EmpowerPlastic/empowerchain/x/proofofexistence/client/cli"
+	"github.com/EmpowerPlastic/empowerchain/x/proofofexistence/keeper"
 )
 
 // ConsensusVersion defines the current x/proofofexistence module consensus version.
@@ -86,19 +85,6 @@ func (AppModuleBasic) GetQueryCmd() *cobra.Command {
 // RegisterInvariants does nothing, there are no invariants to enforce
 func (AppModule) RegisterInvariants(_ sdk.InvariantRegistry) {}
 
-// Deprecated: Route returns the capability module's message routing key.
-func (AppModule) Route() sdk.Route {
-	return sdk.Route{}
-}
-
-// Deprecated: QuerierRoute returns the proofofexistence module's query routing key.
-func (AppModule) QuerierRoute() string { return proofofexistence.QuerierRoute }
-
-// Deprecated: LegacyQuerierHandler returns the proofofexistence module's Querier.
-func (am AppModule) LegacyQuerierHandler(*codec.LegacyAmino) sdk.Querier {
-	return nil
-}
-
 // RegisterServices registers a GRPC query service to respond to the
 // module-specific GRPC queries.
 func (am AppModule) RegisterServices(cfg module.Configurator) {
@@ -145,12 +131,12 @@ func (AppModule) GenerateGenesisState(simState *module.SimulationState) {
 }
 
 // ProposalContents returns all the proofofexistence content functions used to simulate governance proposals.
-func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalContent {
+func (am AppModule) ProposalContents(simState module.SimulationState) []simtypes.WeightedProposalMsg {
 	return nil
 }
 
 // RandomizedParams creates randomized proofofexistence param changes for the simulator.
-func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.ParamChange {
+func (AppModule) RandomizedParams(r *rand.Rand) []simtypes.LegacyParamChange {
 	return nil
 }
 
