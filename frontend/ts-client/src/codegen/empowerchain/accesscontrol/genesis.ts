@@ -36,6 +36,7 @@ export interface ModulePermStoreSDKType {
 export interface Access {
   address: string;
   msgType: string;
+  testField: string;
 }
 /**
  * Single access consisting of permissioned address and msgType
@@ -45,6 +46,7 @@ export interface Access {
 export interface AccessSDKType {
   address: string;
   msg_type: string;
+  test_field: string;
 }
 
 function createBaseGenesisState(): GenesisState {
@@ -150,7 +152,8 @@ export const ModulePermStore = {
 function createBaseAccess(): Access {
   return {
     address: "",
-    msgType: ""
+    msgType: "",
+    testField: ""
   };
 }
 
@@ -162,6 +165,10 @@ export const Access = {
 
     if (message.msgType !== "") {
       writer.uint32(18).string(message.msgType);
+    }
+
+    if (message.testField !== "") {
+      writer.uint32(26).string(message.testField);
     }
 
     return writer;
@@ -184,6 +191,10 @@ export const Access = {
           message.msgType = reader.string();
           break;
 
+        case 3:
+          message.testField = reader.string();
+          break;
+
         default:
           reader.skipType(tag & 7);
           break;
@@ -197,6 +208,7 @@ export const Access = {
     const message = createBaseAccess();
     message.address = object.address ?? "";
     message.msgType = object.msgType ?? "";
+    message.testField = object.testField ?? "";
     return message;
   }
 
