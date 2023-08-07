@@ -38,3 +38,4 @@ Ref: https://keepachangelog.com/en/1.0.0/
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 
 <!-- GH ACTIONS TEMPLATE - INSERT NEW VERSION HERE -->
+## [v0.0.29](https://github.com/EmpowerPlastic/empowerchain/releases/tag/v0.0.29) - 2023-08-07
